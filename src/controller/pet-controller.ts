@@ -1,6 +1,7 @@
 import petsService from "../service/pet-service";
 import {Request, Response} from "express";
 import httpStatus from "http-status";
+import { Pet } from "../protocols";
 
 function getPets(req: Request, res: Response) {
     try {
