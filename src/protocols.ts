@@ -5,10 +5,10 @@ export type ApplicationError = {
 
 export type Pet = {
     nome: string,
-    raça: string,
+    raca: string,
     nascimento: string,
     adotado: boolean,
-    descrição: string,
+    descricao: string,
     imagem: string
     contato: string
 }

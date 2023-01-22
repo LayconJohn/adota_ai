@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import supertest from "supertest";
 import httpStatus from "http-status";
-import server from "src/app";
+import server from "../src/app";
 import petsFactory from "./factories/pets-factory";
 var app = supertest(server);
 describe("GET /pets", function () {
@@ -44,19 +44,11 @@ describe("GET /pets", function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, app.get('/health')];
+                case 0: return [4 /*yield*/, app.get('/pets')];
                 case 1:
                     response = _a.sent();
                     expect(response.statusCode).toBe(httpStatus.OK);
-                    expect(response.body).toEqual([{
-                            nome: petsFactory.listPets()[0].nome,
-                            raça: petsFactory.listPets()[0].raça,
-                            nascimento: petsFactory.listPets()[0].nascimento,
-                            adotado: petsFactory.listPets()[0].adotado,
-                            descrição: petsFactory.listPets()[0].descrição,
-                            imagem: petsFactory.listPets()[0].imagem,
-                            contato: petsFactory.listPets()[0].contato
-                        }]);
+                    expect(response.body).toEqual(petsFactory.listPets());
                     return [2 /*return*/];
             }
         });
