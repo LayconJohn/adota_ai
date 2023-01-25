@@ -15,9 +15,18 @@ async function listPets() {
     });
 }
 
+async function findPetByPetId(petId: number) {
+    return prisma.pets.findFirst({
+        where: {
+            id: petId
+        }
+    })
+}
+
 const petsRepository = {
     listPets,
-    create
+    create,
+    findPetByPetId
 };
 
 export default petsRepository;

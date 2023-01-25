@@ -6,5 +6,6 @@ const router = Router();
 router
     .get("/pets", petsController.getPets)
     .post("/pets", petsController.postPet)
+    .get("/pets/:petId", petsController.getPetById)
 
 export default router;

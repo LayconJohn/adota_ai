@@ -1,6 +1,6 @@
 import { Pet } from "../protocols";
 import { petSchema } from "../schemas/pet-schema.js";
-import { invalidDataError, notFoundError } from "../errors/index.js";
+import { invalidDataError, notFoundError, badRequestError } from "../errors/index.js";
 import petsRepository from "../repository/pet-repository.js";
 
 async function listPets() {
@@ -23,9 +23,22 @@ async function createPet(data: Pet) {
     return createdPet;
 }
 
+async function findPet(petId: number) {
+    if (petId < 1) {
+        throw badRequestError();
+    }
+    const pet = await petsRepository.findPetByPetId(petId);
+    if (!pet) {
+        throw notFoundError();
+    }
+
+    return pet;
+}
+
 const petsService = {
     listPets,
-    createPet
+    createPet,
+    findPet
 }
 
 export default petsService;

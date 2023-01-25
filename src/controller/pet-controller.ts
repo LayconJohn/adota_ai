@@ -27,9 +27,23 @@ async function postPet(req: Request, res: Response) {
     }
 }
 
+async function getPetById(req: Request, res: Response) {
+    try {
+        const petId = Number(req.params.petId);
+        const pet = await petsService.findPet(petId);
+        return res.status(httpStatus.OK).send(pet)
+    } catch (error) {
+        if (error.name === "NotFoundError") {
+            return res.sendStatus(httpStatus.NOT_FOUND);
+        }
+        return res.sendStatus(httpStatus.BAD_REQUEST); 
+    }
+}
+
 const petsController = {
     getPets,
-    postPet
+    postPet,
+    getPetById
 }
 
 export default petsController;
