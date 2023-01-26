@@ -7,5 +7,6 @@ router
     .get("/pets", petsController.getPets)
     .post("/pets", petsController.postPet)
     .get("/pets/:petId", petsController.getPetById)
+    .put("/pets/:petId", petsController.putPet)
 
 export default router;

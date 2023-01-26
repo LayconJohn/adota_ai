@@ -23,10 +23,22 @@ async function findPetByPetId(petId: number) {
     })
 }
 
+async function updatePetByPetId(petId: number) {
+    return prisma.pets.update({
+        where: {
+            id: petId
+        },
+        data: {
+            adotado: true
+        }
+    })
+}
+
 const petsRepository = {
     listPets,
     create,
-    findPetByPetId
+    findPetByPetId,
+    updatePetByPetId
 };
 
 export default petsRepository;

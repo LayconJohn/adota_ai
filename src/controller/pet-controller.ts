@@ -1,6 +1,7 @@
 import petsService from "../service/pet-service.js";
 import {Request, Response} from "express";
 import httpStatus from "http-status";
+import { Pet } from "../protocols";
 
 async function getPets(req: Request, res: Response) {
     try {
@@ -40,10 +41,21 @@ async function getPetById(req: Request, res: Response) {
     }
 }
 
+async function putPet(req: Request, res: Response) {
+    try {
+        const petId = Number(req.params.petId);
+        const petFinalized = await petsService.finalizeAdoption(petId);
+        return res.status(httpStatus.CREATED).send(petFinalized);
+    } catch (error) {
+        return res.sendStatus(httpStatus.BAD_REQUEST); 
+    }
+}
+
 const petsController = {
     getPets,
     postPet,
-    getPetById
+    getPetById,
+    putPet
 }
 
 export default petsController;
