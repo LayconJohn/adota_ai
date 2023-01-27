@@ -3,6 +3,14 @@ export type ApplicationError = {
     message: string;
 };
 
+export type User = {
+    nome: string,
+    email: string,
+    senha: string,
+    confirmarSenha: string,
+    cpf: string
+}
+
 export type Pet = {
     nome: string,
     raca: string,
