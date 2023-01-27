@@ -2,6 +2,7 @@ import { User } from "../protocols";
 import { userSchema } from "../schemas/user-schema.js";
 import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index.js";
 import userRepository from "../repository/user-repository.js";
+import bcrypt from "bcrypt";
 
 async function signUpUser(body: User) {
     if (body.senha !== body.confirmarSenha) {
@@ -16,13 +17,14 @@ async function signUpUser(body: User) {
     if (userExist) {
         throw conflictError('this cpf already exists');
     }
+    const encryptedPassword = bcrypt.hashSync(body.senha, 13);
     const data = {
         email: body.email,
         nome: body.nome,
         cpf: body.cpf,
-        senha: 'bcrypt'
+        senha: encryptedPassword
     }
-    const createdUser = await userRepository.signUpUser(body);
+    const createdUser = await userRepository.signUpUser(data);
     return createdUser;
 }
 
