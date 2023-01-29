@@ -1,5 +1,6 @@
 import prisma from "../database/db.js";
 import { User } from "../protocols";
+import dayjs from "dayjs";
 
 type newUser = Omit<User, "confirmarSenha">
 
@@ -18,9 +19,23 @@ async function findUserByCPFAndEmail(cpf: string, email: string) {
     })
 }
 
+async function findUserByEmail(email: string) {
+    return prisma.users.findFirst({
+        where: {
+            email: email
+        }
+    });
+}
+
+async function createSession(userId: number, token: string) {
+    return 
+}
+
 const userRepository = {
     signUpUser,
-    findUserByCPFAndEmail
+    findUserByCPFAndEmail,
+    findUserByEmail,
+    createSession
 };
 
 export default userRepository;

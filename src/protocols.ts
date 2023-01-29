@@ -11,6 +11,8 @@ export type User = {
     cpf: string
 }
 
+export type UserLogin = Partial<User>;
+
 export type Pet = {
     nome: string,
     raca: string,

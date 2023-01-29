@@ -8,4 +8,9 @@ const userSchema = joi.object({
     cpf: joi.string().required()
 })
 
-export { userSchema };
+const userLoginSchema = joi.object({
+    email: joi.string().email().required(),
+    senha: joi.string().required(),
+})
+
+export { userSchema, userLoginSchema };

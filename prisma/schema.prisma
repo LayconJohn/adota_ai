@@ -24,5 +24,12 @@ model users {
   email      String   @db.VarChar(255)
   nome       String   @db.VarChar(255)
   senha      String   @db.VarChar(255)
-  cpf        String   @db.VarChar(255) 
+  cpf        String   @db.VarChar(255)
+}
+
+model sessions {
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  token    String   @unique
+  createAt DateTime @default(now()) @db.Timestamp(6)
 }
