@@ -28,14 +28,28 @@ async function findUserByEmail(email: string) {
 }
 
 async function createSession(userId: number, token: string) {
-    return 
+    return prisma.sessions.create({
+        data: {
+            userId: userId,
+            token: token
+        }
+    }) 
+}
+
+async function findSessionByToken(token: string) {
+    return prisma.sessions.findFirst({
+        where: {
+            token: token
+        }
+    })
 }
 
 const userRepository = {
     signUpUser,
     findUserByCPFAndEmail,
     findUserByEmail,
-    createSession
+    createSession,
+    findSessionByToken
 };
 
 export default userRepository;

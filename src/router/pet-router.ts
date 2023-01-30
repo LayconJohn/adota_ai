@@ -1,9 +1,11 @@
 import { Router } from "express";
 import petsController from "../controller/pet-controller.js";
+import authMiddleware from "../middleware/auth-middleware.js";
 
 const router = Router();
 
 router
+    .all("/*", authMiddleware.checkToken)
     .get("/pets", petsController.getPets)
     .post("/pets", petsController.postPet)
     .get("/pets/:petId", petsController.getPetById)
