@@ -1,1 +1,1 @@
-export * from "./users-factory.js";
+export * from "./users-factory";

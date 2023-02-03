@@ -1,9 +1,13 @@
 import bcrypt from "bcrypt";
-import { prisma } from "@prisma/client";
+import { User } from "../../src/protocols";
+import prisma from "../../src/database/db"
 
-export async function createUser() {
-    const incomingPassword = 'senhamuitolouca123';
-    const hashedPassword = await bcrypt.hash(incomingPassword, 10);
+type newUser = Omit<User, "confirmarSenha">
+
+export async function createUser(body: newUser) {
+    const hashedPassword = await bcrypt.hash(body.senha, 10);
   
-    return;
-  }
+    return prisma.users.create({
+      data: body
+    });
+}
