@@ -4,14 +4,16 @@ import httpStatus from "http-status";
 import dotenv from "dotenv";
 dotenv.config();
 
-import petsRouter from "./router/pet-router.js";
-import userRouter from "./router/user-router.js";
+import petsRouter from "./router/pet-router";
+import userRouter from "./router/user-router";
 
 const server = express();
 
 server
     .use(express.json())
     .use(cors())
+
+server
     .get("/health", (_req, res) => res.sendStatus(httpStatus.OK))
     .use(petsRouter)
     .use(userRouter)
