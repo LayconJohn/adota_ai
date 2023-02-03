@@ -8,6 +8,11 @@ export async function createUser(body: newUser) {
     const hashedPassword = await bcrypt.hash(body.senha, 10);
   
     return prisma.users.create({
-      data: body
+      data: {
+        nome: body.nome,
+        email: body.email,
+        senha: hashedPassword,
+        cpf: body.cpf
+      }
     });
 }

@@ -34,20 +34,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import petsService from "../service/pet-service.js";
+import petsService from "../service/pet-service";
 import httpStatus from "http-status";
 function getPets(req, res) {
-    try {
-        var pets = petsService.listPets();
-        return res.status(httpStatus.OK).send(pets);
-    }
-    catch (error) {
-        return res.sendStatus(httpStatus.BAD_REQUEST);
-    }
+    return __awaiter(this, void 0, void 0, function () {
+        var pets, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, petsService.listPets()];
+                case 1:
+                    pets = _a.sent();
+                    return [2 /*return*/, res.status(httpStatus.OK).send(pets)];
+                case 2:
+                    error_1 = _a.sent();
+                    if (error_1.name === "NotFoundError") {
+                        return [2 /*return*/, res.sendStatus(httpStatus.NOT_FOUND)];
+                    }
+                    return [2 /*return*/, res.sendStatus(httpStatus.BAD_REQUEST)];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
 }
 function postPet(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, createdPet, error_1;
+        var data, createdPet, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -60,16 +73,63 @@ function postPet(req, res) {
                     createdPet = _a.sent();
                     return [2 /*return*/, res.status(httpStatus.CREATED).send(createdPet)];
                 case 3:
-                    error_1 = _a.sent();
-                    console.log(error_1);
+                    error_2 = _a.sent();
+                    if (error_2.name === "InvalidDataError") {
+                        return [2 /*return*/, res.status(httpStatus.BAD_REQUEST).send(error_2.details)];
+                    }
                     return [2 /*return*/, res.sendStatus(httpStatus.BAD_REQUEST)];
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
+function getPetById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var petId, pet, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    petId = Number(req.params.petId);
+                    return [4 /*yield*/, petsService.findPet(petId)];
+                case 1:
+                    pet = _a.sent();
+                    return [2 /*return*/, res.status(httpStatus.OK).send(pet)];
+                case 2:
+                    error_3 = _a.sent();
+                    if (error_3.name === "NotFoundError") {
+                        return [2 /*return*/, res.sendStatus(httpStatus.NOT_FOUND)];
+                    }
+                    return [2 /*return*/, res.sendStatus(httpStatus.BAD_REQUEST)];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+function putPet(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var petId, petFinalized, error_4;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    petId = Number(req.params.petId);
+                    return [4 /*yield*/, petsService.finalizeAdoption(petId)];
+                case 1:
+                    petFinalized = _a.sent();
+                    return [2 /*return*/, res.status(httpStatus.CREATED).send(petFinalized)];
+                case 2:
+                    error_4 = _a.sent();
+                    return [2 /*return*/, res.sendStatus(httpStatus.BAD_REQUEST)];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
 var petsController = {
     getPets: getPets,
-    postPet: postPet
+    postPet: postPet,
+    getPetById: getPetById,
+    putPet: putPet
 };
 export default petsController;

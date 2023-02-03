@@ -34,85 +34,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { petSchema } from "../schemas/pet-schema";
-import { invalidDataError, notFoundError, badRequestError } from "../errors/index";
-import petsRepository from "../repository/pet-repository";
-function listPets() {
+import httpStatus from "http-status";
+import userRepository from "../repository/user-repository";
+function checkToken(req, res, next) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var pets;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, petsRepository.listPets()];
-                case 1:
-                    pets = _a.sent();
-                    if (pets.length === 0) {
-                        throw notFoundError();
-                    }
-                    return [2 /*return*/, pets];
-            }
-        });
-    });
-}
-function createPet(data) {
-    return __awaiter(this, void 0, void 0, function () {
-        var validation, errors, createdPet;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var token, session, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    validation = petSchema.validate(data, { abortEarly: false });
-                    if (validation.error) {
-                        errors = validation.error.details.map(function (detail) { return detail.message; });
-                        throw invalidDataError(errors);
+                    token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace("Bearer ", "");
+                    if (!token) {
+                        return [2 /*return*/, res.sendStatus(httpStatus.BAD_REQUEST)];
                     }
-                    return [4 /*yield*/, petsRepository.create(data)];
+                    _b.label = 1;
                 case 1:
-                    createdPet = _a.sent();
-                    return [2 /*return*/, createdPet];
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepository.findSessionByToken(token)];
+                case 2:
+                    session = _b.sent();
+                    if (!session) {
+                        return [2 /*return*/, res.sendStatus(httpStatus.UNAUTHORIZED)];
+                    }
+                    res.locals.session = session;
+                    next();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _b.sent();
+                    return [2 /*return*/, res.sendStatus(httpStatus.UNAUTHORIZED)];
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-function findPet(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var pet;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.findPetByPetId(petId)];
-                case 1:
-                    pet = _a.sent();
-                    if (!pet) {
-                        throw notFoundError();
-                    }
-                    return [2 /*return*/, pet];
-            }
-        });
-    });
-}
-function finalizeAdoption(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var petUpdated;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.updatePetByPetId(petId)];
-                case 1:
-                    petUpdated = _a.sent();
-                    return [2 /*return*/, petUpdated];
-            }
-        });
-    });
-}
-var petsService = {
-    listPets: listPets,
-    createPet: createPet,
-    findPet: findPet,
-    finalizeAdoption: finalizeAdoption
+var authMiddleware = {
+    checkToken: checkToken
 };
-export default petsService;
+export default authMiddleware;

@@ -5,7 +5,7 @@ import authMiddleware from "../middleware/auth-middleware";
 const router = Router();
 
 router
-    .all("/*", authMiddleware.checkToken)
+    .all("/pets", authMiddleware.checkToken)
     .get("/pets", petsController.getPets)
     .post("/pets", petsController.postPet)
     .get("/pets/:petId", petsController.getPetById)

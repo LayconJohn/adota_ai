@@ -34,85 +34,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { petSchema } from "../schemas/pet-schema";
-import { invalidDataError, notFoundError, badRequestError } from "../errors/index";
-import petsRepository from "../repository/pet-repository";
-function listPets() {
+import { userSchema, userLoginSchema } from "../schemas/user-schema";
+import { invalidDataError, notFoundError, conflictError } from "../errors/index";
+import userRepository from "../repository/user-repository";
+import bcrypt from "bcrypt";
+import { v4 as uuid } from "uuid";
+function signUpUser(_a) {
+    var email = _a.email, nome = _a.nome, senha = _a.senha, confirmarSenha = _a.confirmarSenha, cpf = _a.cpf;
     return __awaiter(this, void 0, void 0, function () {
-        var pets;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, petsRepository.listPets()];
-                case 1:
-                    pets = _a.sent();
-                    if (pets.length === 0) {
-                        throw notFoundError();
-                    }
-                    return [2 /*return*/, pets];
-            }
-        });
-    });
-}
-function createPet(data) {
-    return __awaiter(this, void 0, void 0, function () {
-        var validation, errors, createdPet;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var validation, errors, userExist, encryptedPassword, data, createdUser;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    validation = petSchema.validate(data, { abortEarly: false });
+                    if (senha !== confirmarSenha) {
+                        throw conflictError('Password and confirm Password need to Be Equal');
+                    }
+                    validation = userSchema.validate({ email: email, nome: nome, senha: senha, confirmarSenha: confirmarSenha, cpf: cpf }, { abortEarly: false });
                     if (validation.error) {
                         errors = validation.error.details.map(function (detail) { return detail.message; });
                         throw invalidDataError(errors);
                     }
-                    return [4 /*yield*/, petsRepository.create(data)];
+                    return [4 /*yield*/, userRepository.findUserByCPFAndEmail(cpf, email)];
                 case 1:
-                    createdPet = _a.sent();
-                    return [2 /*return*/, createdPet];
+                    userExist = _b.sent();
+                    if (userExist) {
+                        throw conflictError('this user already exists');
+                    }
+                    encryptedPassword = bcrypt.hashSync(senha, 10);
+                    data = {
+                        email: email,
+                        nome: nome,
+                        cpf: cpf,
+                        senha: encryptedPassword
+                    };
+                    return [4 /*yield*/, userRepository.signUpUser(data)];
+                case 2:
+                    createdUser = _b.sent();
+                    return [2 /*return*/, createdUser];
             }
         });
     });
 }
-function findPet(petId) {
+function signInUser(body) {
     return __awaiter(this, void 0, void 0, function () {
-        var pet;
+        var validation, errors, user, encryptedPassword, token;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
+                    validation = userLoginSchema.validate(body, { abortEarly: false });
+                    if (validation.error) {
+                        errors = validation.error.details.map(function (detail) { return detail.message; });
+                        console.log(errors);
+                        throw invalidDataError(errors);
                     }
-                    return [4 /*yield*/, petsRepository.findPetByPetId(petId)];
+                    return [4 /*yield*/, userRepository.findUserByEmail(body.email)];
                 case 1:
-                    pet = _a.sent();
-                    if (!pet) {
+                    user = _a.sent();
+                    encryptedPassword = bcrypt.compareSync(body.senha, user.senha);
+                    if (!user.id || !encryptedPassword) {
                         throw notFoundError();
                     }
-                    return [2 /*return*/, pet];
+                    token = uuid();
+                    return [4 /*yield*/, userRepository.createSession(user.id, token)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, token];
             }
         });
     });
 }
-function finalizeAdoption(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var petUpdated;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.updatePetByPetId(petId)];
-                case 1:
-                    petUpdated = _a.sent();
-                    return [2 /*return*/, petUpdated];
-            }
-        });
-    });
-}
-var petsService = {
-    listPets: listPets,
-    createPet: createPet,
-    findPet: findPet,
-    finalizeAdoption: finalizeAdoption
+var userService = {
+    signUpUser: signUpUser,
+    signInUser: signInUser
 };
-export default petsService;
+export default userService;

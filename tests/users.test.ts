@@ -3,8 +3,17 @@ import httpStatus from "http-status";
 import server from "../src/app";
 import { prisma } from "@prisma/client";
 import { createUser } from "./factories";
+import { cleanDb } from "./helpers";
 
 const app = supertest(server);
+    
+beforeEach(async () => {
+    await cleanDb();
+});
+
+afterAll(async () => {
+    await cleanDb();
+});
 
 describe("POST /signup", () => {
     it ("should respond with status 409 when the email or cpf is already exist", async () => {
@@ -74,7 +83,7 @@ describe("POST /signin", () => {
         const body = {email: "email@example.com", senha: "senha"};
 
         const response = await app.post("/signin").send(body);
-
+        console.log(response.body);
         expect(response.statusCode).toBe(httpStatus.NOT_FOUND);
     });
 

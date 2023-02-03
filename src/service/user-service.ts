@@ -38,7 +38,7 @@ async function signInUser(body: UserLogin) {
     }
     const user = await userRepository.findUserByEmail(body.email);
     const encryptedPassword = bcrypt.compareSync(body.senha, user.senha);
-    if (!user || !encryptedPassword) {
+    if (!user.id || !encryptedPassword) {
         throw notFoundError();
     }
     const token = uuid();
