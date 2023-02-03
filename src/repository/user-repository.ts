@@ -1,4 +1,4 @@
-import prisma from "../database/db.js";
+import prisma from "../database/db";
 import { User } from "../protocols";
 import dayjs from "dayjs";
 

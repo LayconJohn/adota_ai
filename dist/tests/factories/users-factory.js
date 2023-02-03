@@ -34,85 +34,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { petSchema } from "../schemas/pet-schema";
-import { invalidDataError, notFoundError, badRequestError } from "../errors/index";
-import petsRepository from "../repository/pet-repository";
-function listPets() {
+import bcrypt from "bcrypt";
+import prisma from "../../src/database/db";
+export function createUser(body) {
     return __awaiter(this, void 0, void 0, function () {
-        var pets;
+        var hashedPassword;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, petsRepository.listPets()];
+                case 0: return [4 /*yield*/, bcrypt.hash(body.senha, 10)];
                 case 1:
-                    pets = _a.sent();
-                    if (pets.length === 0) {
-                        throw notFoundError();
-                    }
-                    return [2 /*return*/, pets];
+                    hashedPassword = _a.sent();
+                    return [2 /*return*/, prisma.users.create({
+                            data: {
+                                nome: body.nome,
+                                email: body.email,
+                                senha: hashedPassword,
+                                cpf: body.cpf
+                            }
+                        })];
             }
         });
     });
 }
-function createPet(data) {
-    return __awaiter(this, void 0, void 0, function () {
-        var validation, errors, createdPet;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    validation = petSchema.validate(data, { abortEarly: false });
-                    if (validation.error) {
-                        errors = validation.error.details.map(function (detail) { return detail.message; });
-                        throw invalidDataError(errors);
-                    }
-                    return [4 /*yield*/, petsRepository.create(data)];
-                case 1:
-                    createdPet = _a.sent();
-                    return [2 /*return*/, createdPet];
-            }
-        });
-    });
-}
-function findPet(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var pet;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.findPetByPetId(petId)];
-                case 1:
-                    pet = _a.sent();
-                    if (!pet) {
-                        throw notFoundError();
-                    }
-                    return [2 /*return*/, pet];
-            }
-        });
-    });
-}
-function finalizeAdoption(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var petUpdated;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.updatePetByPetId(petId)];
-                case 1:
-                    petUpdated = _a.sent();
-                    return [2 /*return*/, petUpdated];
-            }
-        });
-    });
-}
-var petsService = {
-    listPets: listPets,
-    createPet: createPet,
-    findPet: findPet,
-    finalizeAdoption: finalizeAdoption
-};
-export default petsService;

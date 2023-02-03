@@ -36,21 +36,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import supertest from "supertest";
 import httpStatus from "http-status";
-import server from "../src/app";
+import server from "../src/app.js";
 import petsFactory from "./factories/pets-factory";
 var app = supertest(server);
 describe("GET /pets", function () {
-    it("should response with status code 200 and pets data", function () { return __awaiter(void 0, void 0, void 0, function () {
+    it("should respond with status 401 if no token is given", function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, app.get('/pets')];
+                case 0: return [4 /*yield*/, server.get("/pets")];
                 case 1:
                     response = _a.sent();
-                    expect(response.statusCode).toBe(httpStatus.OK);
-                    expect(response.body).toEqual(petsFactory.listPets());
+                    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
                     return [2 /*return*/];
             }
         });
     }); });
+    it("should respond with status 401 if given token is not valid", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var token, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    token = "tokeninvalido";
+                    return [4 /*yield*/, server.get("/pets").set("Authorization", "Bearer ".concat(token))];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    describe("When token is valid", function () {
+        it("should response with status code 200 and pets data", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, app.get('/pets')];
+                    case 1:
+                        response = _a.sent();
+                        expect(response.statusCode).toBe(httpStatus.OK);
+                        expect(response.body).toEqual(petsFactory.listPets());
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
 });

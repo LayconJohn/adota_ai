@@ -34,85 +34,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { petSchema } from "../schemas/pet-schema";
-import { invalidDataError, notFoundError, badRequestError } from "../errors/index";
-import petsRepository from "../repository/pet-repository";
-function listPets() {
+import httpStatus from "http-status";
+import userService from "../service/user-service";
+function signUp(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var pets;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, petsRepository.listPets()];
+        var _a, email, nome, senha, confirmarSenha, cpf, createdUser, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = req.body, email = _a.email, nome = _a.nome, senha = _a.senha, confirmarSenha = _a.confirmarSenha, cpf = _a.cpf;
+                    return [4 /*yield*/, userService.signUpUser({ email: email, nome: nome, senha: senha, confirmarSenha: confirmarSenha, cpf: cpf })];
                 case 1:
-                    pets = _a.sent();
-                    if (pets.length === 0) {
-                        throw notFoundError();
+                    createdUser = _b.sent();
+                    return [2 /*return*/, res.status(httpStatus.CREATED).send(createdUser)];
+                case 2:
+                    error_1 = _b.sent();
+                    console.log(error_1);
+                    if (error_1.name === "ConflictError") {
+                        return [2 /*return*/, res.sendStatus(httpStatus.CONFLICT)];
                     }
-                    return [2 /*return*/, pets];
+                    if (error_1.name === "InvalidDataError") {
+                        return [2 /*return*/, res.status(httpStatus.UNPROCESSABLE_ENTITY).send(error_1.details)];
+                    }
+                    return [2 /*return*/, res.sendStatus(httpStatus.NOT_FOUND)];
+                case 3: return [2 /*return*/];
             }
         });
     });
 }
-function createPet(data) {
+function signIn(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var validation, errors, createdPet;
+        var body, token, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    validation = petSchema.validate(data, { abortEarly: false });
-                    if (validation.error) {
-                        errors = validation.error.details.map(function (detail) { return detail.message; });
-                        throw invalidDataError(errors);
-                    }
-                    return [4 /*yield*/, petsRepository.create(data)];
+                    body = req.body;
+                    _a.label = 1;
                 case 1:
-                    createdPet = _a.sent();
-                    return [2 /*return*/, createdPet];
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userService.signInUser(body)];
+                case 2:
+                    token = _a.sent();
+                    return [2 /*return*/, res.status(httpStatus.OK).send({ token: token })];
+                case 3:
+                    error_2 = _a.sent();
+                    console.log(error_2);
+                    if (error_2.name === "InvalidDataError") {
+                        return [2 /*return*/, res.status(httpStatus.UNPROCESSABLE_ENTITY).send(error_2)];
+                    }
+                    if (error_2.name === "NotFoundError") {
+                        return [2 /*return*/, res.sendStatus(httpStatus.NOT_FOUND)];
+                    }
+                    return [2 /*return*/, res.sendStatus(httpStatus.NOT_FOUND)];
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-function findPet(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var pet;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.findPetByPetId(petId)];
-                case 1:
-                    pet = _a.sent();
-                    if (!pet) {
-                        throw notFoundError();
-                    }
-                    return [2 /*return*/, pet];
-            }
-        });
-    });
-}
-function finalizeAdoption(petId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var petUpdated;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (petId < 1) {
-                        throw badRequestError();
-                    }
-                    return [4 /*yield*/, petsRepository.updatePetByPetId(petId)];
-                case 1:
-                    petUpdated = _a.sent();
-                    return [2 /*return*/, petUpdated];
-            }
-        });
-    });
-}
-var petsService = {
-    listPets: listPets,
-    createPet: createPet,
-    findPet: findPet,
-    finalizeAdoption: finalizeAdoption
+var userController = {
+    signUp: signUp,
+    signIn: signIn
 };
-export default petsService;
+export default userController;

@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import prisma from "../database/db.js";
+import prisma from "../database/db";
 function create(data) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -45,27 +45,45 @@ function create(data) {
     });
 }
 function listPets() {
-    return [
-        {
-            nome: "Rex",
-            raca: "Boxer",
-            adotado: false,
-            descricao: "Gosta bastante de brincar com corda",
-            imagem: "https://petepop.ig.com.br/wp-content/uploads/2021/05/Lucie-Heles%CC%8Cicova%CC%81-Unsplash.jpg",
-            contato: "(11) 981818181"
-        },
-        {
-            nome: "Naninha",
-            raca: "SDR",
-            adotado: false,
-            descricao: "Acabou de nascer, previsa ir ao veterinário para checkup",
-            imagem: "https://static1.patasdacasa.com.br/articles/0/22/40/@/15884-foto-do-gato-siames-filhote-mostra-como-articles_media_slider_mobile-2.jpg",
-            contato: "(75) 988888888"
-        },
-    ];
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, prisma.pets.findMany({
+                    where: {
+                        adotado: false
+                    }
+                })];
+        });
+    });
+}
+function findPetByPetId(petId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, prisma.pets.findFirst({
+                    where: {
+                        id: petId
+                    }
+                })];
+        });
+    });
+}
+function updatePetByPetId(petId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, prisma.pets.update({
+                    where: {
+                        id: petId
+                    },
+                    data: {
+                        adotado: true
+                    }
+                })];
+        });
+    });
 }
 var petsRepository = {
     listPets: listPets,
-    create: create
+    create: create,
+    findPetByPetId: findPetByPetId,
+    updatePetByPetId: updatePetByPetId
 };
 export default petsRepository;
