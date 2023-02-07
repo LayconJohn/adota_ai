@@ -1,7 +1,7 @@
 import prisma from "../database/db";
 import { Pet } from "../protocols";
 
-async function create(data: Pet) {
+async function create(data) {
     return prisma.pets.create({
         data: data
     })

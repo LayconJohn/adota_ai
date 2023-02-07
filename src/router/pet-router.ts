@@ -5,10 +5,9 @@ import authMiddleware from "../middleware/auth-middleware";
 const router = Router();
 
 router
-    .all("/pets", authMiddleware.checkToken)
-    .get("/pets", petsController.getPets)
-    .post("/pets", petsController.postPet)
-    .get("/pets/:petId", petsController.getPetById)
-    .put("/pets/:petId", petsController.putPet)
+    .get("/pets", authMiddleware.checkToken ,petsController.getPets)
+    .post("/pets", authMiddleware.checkToken ,petsController.postPet)
+    .get("/pets/:petId", authMiddleware.checkToken ,petsController.getPetById)
+    .put("/pets/:petId", authMiddleware.checkToken ,petsController.putPet)
 
 export default router;

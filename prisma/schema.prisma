@@ -16,6 +16,8 @@ model pets {
   imagem     String  @db.VarChar(255)
   contato    String  @db.VarChar(255)
   nascimento String? @db.VarChar(255)
+  userId     Int
+  users      users   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model users {
@@ -25,6 +27,7 @@ model users {
   nome       String   @db.VarChar(255)
   senha      String   @db.VarChar(255)
   cpf        String   @db.VarChar(255)
+  pets       pets[]
 }
 
 model sessions {
