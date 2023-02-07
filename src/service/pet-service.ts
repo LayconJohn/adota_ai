@@ -12,14 +12,14 @@ async function listPets() {
     return pets;
 }
 
-async function createPet(data: Pet) {
+async function createPet(data: Pet, userId: number) {
     const validation = petSchema.validate(data, { abortEarly: false});
     if (validation.error) {
         const errors = validation.error.details.map( detail => detail.message); 
         throw invalidDataError(errors);
     }
 
-    const createdPet = await petsRepository.create(data);
+    const createdPet = await petsRepository.create(data, userId);
     return createdPet;
 }
 

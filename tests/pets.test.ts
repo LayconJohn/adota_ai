@@ -78,6 +78,60 @@ describe("POST /pets", () => {
   });
 
   describe("When token is valid", () => {
-    
+    it("should response with status 400 when the schema is incorrect", async () => {
+      const user = await createUser({
+        nome: "Nomezinho",
+        email: "email@email.com",
+        senha: "senha",
+        cpf: "10101011101"
+      });
+      const token = await generateValidToken(user);
+
+      const response = await app.post('/pets').set("Authorization", `Bearer ${token}`).send({
+        nome: "Wandeleia",
+        adotado: false,
+        descricao: "Possui 2 anos e irei para a Espanha, não conseguindo levar ele, Espero que alguém dê um bom lar para ela",
+        imagem: 5,
+        contato: "(73) 98867 5742",
+        nascimento: "02-02-2021",
+        userId: user.id
+      });
+
+      expect(response.statusCode).toBe(httpStatus.BAD_REQUEST);
+      expect(response.body).toEqual(["\"raca\" is required", "\"imagem\" must be a string"]);
+    });
+
+    it ("should response with status 201 and the created Pet data", async () => {
+      const user = await createUser({
+        nome: "Nomezinho",
+        email: "email@email.com",
+        senha: "senha",
+        cpf: "10101011101"
+      });
+      const token = await generateValidToken(user);
+      const response = await app.post('/pets').set("Authorization", `Bearer ${token}`).send({
+        nome: "Wandeleia",
+        raca: "Pastor Alemão",
+        adotado: false,
+        descricao: "Possui 2 anos e irei para a Espanha, não conseguindo levar ele, Espero que alguém dê um bom lar para ela",
+        imagem: "https://img.freepik.com/fotos-premium/cao-pastor-alemao-2-anos-e-meio-sentado_191971-3925.jpg?w=2000",
+        contato: "(73) 98867 5742",
+        nascimento: "02-02-2021",
+        userId: user.id
+      });
+      
+      expect(response.statusCode).toBe(httpStatus.CREATED);
+      expect(response.body).toEqual(    {
+        id: expect.any(Number),
+        nome: 'Wandeleia',
+        raca: 'Pastor Alemão',
+        adotado: false,
+        descricao: 'Possui 2 anos e irei para a Espanha, não conseguindo levar ele, Espero que alguém dê um bom lar para ela',
+        imagem: 'https://img.freepik.com/fotos-premium/cao-pastor-alemao-2-anos-e-meio-sentado_191971-3925.jpg?w=2000',
+        contato: '(73) 98867 5742',
+        nascimento: '02-02-2021',
+        userId: user.id
+      });
+    });
   });
 });

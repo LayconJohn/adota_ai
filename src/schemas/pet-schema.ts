@@ -7,7 +7,8 @@ const petSchema = joi.object({
     descricao: joi.string().min(1).required(),
     imagem: joi.string().min(1).required(),
     contato: joi.string().min(1).required(),
-    nascimento: joi.string()
+    nascimento: joi.string(),
+    userId: joi.number().required()
 })
 
 export { petSchema };

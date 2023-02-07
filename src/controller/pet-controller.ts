@@ -17,8 +17,9 @@ async function getPets(req: Request, res: Response) {
 
 async function postPet(req: Request, res: Response) {
     const data = req.body;
+    const { userId } = res.locals.session;
     try {
-        const createdPet = await petsService.createPet(data);
+        const createdPet = await petsService.createPet(data, Number(userId));
         return res.status(httpStatus.CREATED).send(createdPet);
     } catch (error) {
         if (error.name === "InvalidDataError") {
