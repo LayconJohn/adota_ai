@@ -1,7 +1,7 @@
-import { User, UserLogin } from "../protocols";
-import { userSchema, userLoginSchema } from "../schemas/user-schema";
-import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index";
-import userRepository from "../repository/user-repository";
+import { User, UserLogin } from "../protocols.js";
+import { userSchema, userLoginSchema } from "../schemas/user-schema.js";
+import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index.js";
+import userRepository from "../repository/user-repository.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 

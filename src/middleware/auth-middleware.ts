@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from "express";
 import httpStatus from "http-status";
-import userRepository from "../repository/user-repository";
+import userRepository from "../repository/user-repository.js";
 
 async function checkToken(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.replace("Bearer ", "");

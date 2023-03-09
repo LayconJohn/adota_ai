@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
-        "outDir": "dist",
+        "target": "es2022",
+        "outDir": "./dist",
         "esModuleInterop": true,
-        "module": "es6",
+        "module": "es2022",
         "baseUrl": ".",
-        "moduleResolution": "Node",
+        "moduleResolution": "node",
         "paths": {
             "joi": [
                 "/node_modules/joi/dist/joi-browser.min.js"

@@ -1,5 +1,5 @@
-import prisma from "../database/db";
-import { Pet } from "../protocols";
+import prisma from "../database/db.js";
+import { Pet } from "../protocols.js";
 
 async function create(data, userId: number) {
     return prisma.pets.create({
@@ -9,7 +9,7 @@ async function create(data, userId: number) {
         }
     })
 }
-
+ 
 async function listPets() {
     return prisma.pets.findMany({
         where: {

@@ -1,7 +1,7 @@
-import petsService from "../service/pet-service";
+import petsService from "../service/pet-service.js";
 import {Request, Response} from "express";
 import httpStatus from "http-status";
-import { Pet } from "../protocols";
+import { Pet } from "../protocols.js";
 
 async function getPets(req: Request, res: Response) {
     try {
@@ -14,7 +14,7 @@ async function getPets(req: Request, res: Response) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
 }
-
+ 
 async function postPet(req: Request, res: Response) {
     const data = req.body;
     const { userId } = res.locals.session;

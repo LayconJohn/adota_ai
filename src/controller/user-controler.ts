@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import httpStatus from "http-status";
-import { User, UserLogin } from "../protocols";
-import userService from "../service/user-service";
+import { User, UserLogin } from "../protocols.js";
+import userService from "../service/user-service.js";
 
 async function signUp(req: Request, res: Response) {
     try {

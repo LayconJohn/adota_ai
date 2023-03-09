@@ -1,5 +1,5 @@
-import prisma from "../database/db";
-import { User } from "../protocols";
+import prisma from "../database/db.js";
+import { User } from "../protocols.js";
 import dayjs from "dayjs";
 
 type newUser = Omit<User, "confirmarSenha">

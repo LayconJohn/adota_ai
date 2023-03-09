@@ -1,7 +1,7 @@
-import { Pet } from "../protocols";
-import { petSchema } from "../schemas/pet-schema";
-import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index";
-import petsRepository from "../repository/pet-repository";
+import { Pet } from "../protocols.js";
+import { petSchema } from "../schemas/pet-schema.js";
+import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index.js";
+import petsRepository from "../repository/pet-repository.js";
 
 async function listPets() {
     const pets = await petsRepository.listPets();
@@ -11,7 +11,7 @@ async function listPets() {
     }
     return pets;
 }
-
+ 
 async function createPet(data: Pet, userId: number) {
     const validation = petSchema.validate(data, { abortEarly: false});
     if (validation.error) {
