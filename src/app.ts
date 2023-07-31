@@ -4,8 +4,8 @@ import httpStatus from "http-status";
 import dotenv from "dotenv";
 dotenv.config();
 
-import petsRouter from "./router/pet-router";
-import userRouter from "./router/user-router";
+import petsRouter from "./router/pet-router.js";
+import userRouter from "./router/user-router.js";
 
 const server = express();
 

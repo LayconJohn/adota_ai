@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from "express";
 import httpStatus from "http-status";
-import userRepository from "../repository/user-repository";
+import AuthRepository from "../repository/auth-repository.js";
 
 async function checkToken(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.replace("Bearer ", "");
@@ -9,7 +9,7 @@ async function checkToken(req: Request, res: Response, next: NextFunction) {
     }
 
     try {
-        const session = await userRepository.findSessionByToken(token);
+        const session = await AuthRepository.findSessionByToken(token);
         if (!session) {
             return res.sendStatus(httpStatus.UNAUTHORIZED);
         }

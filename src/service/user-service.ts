@@ -1,9 +1,10 @@
-import { User, UserLogin } from "../protocols";
-import { userSchema, userLoginSchema } from "../schemas/user-schema";
-import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index";
-import userRepository from "../repository/user-repository";
+import { User, UserLogin } from "../protocols.js";
+import { userSchema, userLoginSchema } from "../schemas/user-schema.js";
+import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index.js";
+import userRepository from "../repository/user-repository.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
+import AuthRepository from "../repository/auth-repository.js";
 
 async function signUpUser({ email, nome, senha, confirmarSenha, cpf }: User) {
     if (senha !== confirmarSenha) {
@@ -42,7 +43,7 @@ async function signInUser(body: UserLogin) {
         throw notFoundError();
     }
     const token = uuid();
-    await userRepository.createSession(user.id, token);
+    await AuthRepository.createSession(user.id, token);
     return token;
 }
 

@@ -135,3 +135,37 @@ describe("POST /pets", () => {
     });
   });
 });
+
+describe("GET /pets/:petId", () => {
+  it("should respond with status 400 if no token is given", async () => {
+    const response = await app.get("/pets");
+
+    expect(response.statusCode).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 401 if given token is not valid", async () => {
+    const token = 'tokeninvalido';
+
+    const response = await app.post("/pets").set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(httpStatus.UNAUTHORIZED);
+  });
+
+  describe("When token is valid", () => {
+    it("should response with status 200 and pet data", async () => {
+      const user = await createUser({
+        nome: "Nomezinho",
+        email: "email@email.com",
+        senha: "senha",
+        cpf: "10101011101"
+      });
+      const token = await generateValidToken(user);
+      const pets = await createPets(user.id);
+
+      //TO-DO
+         // Criar o reponse com o get usando petId
+         // VErificar se o status é 200
+         // verificar se o body tá certinho
+    })
+  })  
+});

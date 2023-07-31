@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import httpStatus from "http-status";
-import { User, UserLogin } from "../protocols";
-import userService from "../service/user-service";
+import { User, UserLogin } from "../protocols.js";
+import userService from "../service/user-service.js";
 
 async function signUp(req: Request, res: Response) {
     try {
@@ -24,7 +24,7 @@ async function signIn(req: Request, res: Response) {
     const body = req.body as UserLogin;
     try {
         const token = await userService.signInUser(body);
-        return res.status(httpStatus.OK).send({token: token});
+        return res.status(httpStatus.OK).send({acess_token: token});
     } catch (error) {
         console.log(error);
         if (error.name === "InvalidDataError") {
