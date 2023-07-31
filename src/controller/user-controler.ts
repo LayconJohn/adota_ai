@@ -9,7 +9,6 @@ async function signUp(req: Request, res: Response) {
         const createdUser = await userService.signUpUser({ email, nome, senha, confirmarSenha, cpf });
         return res.status(httpStatus.CREATED).send(createdUser);
     } catch (error) {
-        console.log(error);
         if (error.name === "ConflictError") {
             return res.sendStatus(httpStatus.CONFLICT);
         }
