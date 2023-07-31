@@ -4,7 +4,7 @@
         "outDir": "./dist",
         "esModuleInterop": true,
         "module": "es2022",
-        "baseUrl": ".",
+        "baseUrl": "./",
         "moduleResolution": "node",
         "paths": {
             "joi": [

@@ -24,7 +24,7 @@ async function signIn(req: Request, res: Response) {
     const body = req.body as UserLogin;
     try {
         const token = await userService.signInUser(body);
-        return res.status(httpStatus.OK).send(token);
+        return res.status(httpStatus.OK).send({acess_token: token});
     } catch (error) {
         console.log(error);
         if (error.name === "InvalidDataError") {
