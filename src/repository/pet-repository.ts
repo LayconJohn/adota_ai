@@ -14,6 +14,13 @@ async function listPets() {
     return prisma.pets.findMany({
         where: {
             adotado: false
+        },
+        include: {
+            users: {
+                select: {
+                    nome: true
+                }
+            }
         }
     });
 }
