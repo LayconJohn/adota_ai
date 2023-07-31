@@ -3,13 +3,24 @@ import { petSchema } from "../schemas/pet-schema.js";
 import { invalidDataError, notFoundError, badRequestError, conflictError } from "../errors/index.js";
 import petsRepository from "../repository/pet-repository.js";
 
-async function listPets() {
+async function listPets(page: number) {
+    if (page < 1 || isNaN(page)) {
+        throw badRequestError();
+    }
+
+    let firstPage = 0;
+    let lastPage = 9;
+    if (page > 1) {
+      firstPage = (page * 9) - 9;
+      lastPage = page * 9;
+    }  
+
     const pets = await petsRepository.listPets();
     
     if (pets.length === 0) {
         throw notFoundError();
     }
-    return pets;
+    return pets.reverse().slice(firstPage, lastPage);
 }
  
 async function createPet(data: Pet, userId: number) {

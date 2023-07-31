@@ -4,8 +4,9 @@ import httpStatus from "http-status";
 import { Pet } from "../protocols.js";
 
 async function getPets(req: Request, res: Response) {
+    const page = Number(req.query.page);
     try {
-        const pets = await petsService.listPets();
+        const pets = await petsService.listPets(page);
         return res.status(httpStatus.OK).send(pets);
     } catch (error) {
         if (error.name === "NotFoundError") {
