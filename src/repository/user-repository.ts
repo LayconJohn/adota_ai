@@ -6,7 +6,11 @@ type newUser = Omit<User, "confirmarSenha">
 
 async function signUpUser(body: newUser) {
     return prisma.users.create({
-        data: body
+        data: body,
+        select: {
+            nome: true,
+            email: true
+        }
     })
 }
 
