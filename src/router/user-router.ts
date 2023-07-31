@@ -4,7 +4,7 @@ import userController from "../controller/user-controler.js";
 const router = Router();
 
 router
-    .post("/signup", userController.signUp)
-    .post("/signin", userController.signIn)
+    .post("/user", userController.signUp)
+    .post("/login", userController.signIn)
 
 export default router;
