@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 import AuthRepository from "../repository/auth-repository.js";
 
+//TO-DO: Usar um loading: https://loading.io/
+
 async function signUpUser({ email, nome, senha, confirmarSenha, cpf }: User) {
     if (senha !== confirmarSenha) {
         throw conflictError('Password and confirm Password need to Be Equal');
