@@ -6,7 +6,7 @@ const imagePattern = /(((https?|ftp):\/\/)?([\w\-\.])+(\.)([\w]){2,4}([\w\/+=%&_
 
 const petSchema = joi.object({
     nome: joi.string().min(1).required(),
-    raca: joi.string().min(1).required(),
+    raca: joi.string(),
     adotado: joi.boolean().required(),
     descricao: joi.string().min(1).required(),
     imagem: joi.string().regex(imagePattern).min(1).required(),
