@@ -5,6 +5,7 @@ async function create(data, userId: number) {
     return prisma.pets.create({
         data: {
             ...data,
+            adotado: false,
             userId
         }
     })

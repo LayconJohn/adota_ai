@@ -24,7 +24,7 @@ async function listPets(page: number) {
 }
  
 async function createPet(data: Pet, userId: number) {
-    const validation = petSchema.validate(data, { abortEarly: false});
+    const validation = petSchema.validate({...data, adotado: false, userId: userId}, { abortEarly: false});
     if (validation.error) {
         const errors = validation.error.details.map( detail => detail.message); 
         throw invalidDataError(errors);
